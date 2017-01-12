@@ -1,0 +1,11 @@
+build:
+  image: sedouard/node-mongo:latest
+  commands:
+deploy:
+  git_push:
+    branch: master
+    remote: dokku@vmpower.centralus.cloudapp.azure.com:chartjs-demo
+    force: true
+    when:
+      branch: master
+

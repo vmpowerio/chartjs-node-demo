@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Chartjs-Node Demo - VMPower.io</title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <link rel="stylesheet" href="/stylesheets/materialize.min.css" />
+    <link rel="stylesheet" href="/stylesheets/prism-dark.css" />
+    <link rel="stylesheet" href="/stylesheets/material-icons.css"/>
+    <style type="text/css" media="screen">
+    </style>
+  </head>
+  <body>
+    <nav>
+        <div class="nav-wrapper">
+            <a href="https://vmpower.io?utm_source=chartjs-node" class="brand-logo"><img class="vmpower-logo" src="https://vmpower.azureedge.net/prod/dist/img/vmpower-white.png"></a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <li target="_blank" class="nav-button"><i class="material-icons">code</i><a target="_blank" href="https://github.com/vmpowerio">More Projects</a></li>
+            <li target="_blank" class="nav-button"><i class="material-icons">call_split</i><a class="right" href="https://github.com/vmpowerio/chartjs-node">Fork It!</a></li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container">
+    <div class="row">
+        <div class="col s12 valign-wrapper">
+            <div class="valign center">
+                <div class="row">
+                    <img class="banner-logo" src="/images/chartjsnode.png">
+                    <h5>Supported by</h5>
+                    <a target="_blank" href="https://vmpower.io?utm_source=chartjs-node"><img class="vmpower-logo" src="https://vmpower.azureedge.net/blog/vmpower-logo-black.png"></a>
+                </div>
+                <div id="editor-container" class="row">
+                  <p>Create static images of beautiful <a target="_blank" href="http://www.chartjs.org">Chart.js</a> charts using Node! Try it out right here.</a>
+                  <p>Enter the ChartJS <a target="_blank" href="http://www.chartjs.org/docs/#getting-started-creating-a-chart">configuration object</a> as JSON and we"ll generate the static-rendered version of thie chartjs chart using the npm package <a target="_blank" href="https://npmjs.com/package/chartjs-node"><strong>chartjs-node </strong> NPM package.</a>
+                  <div id="editor">{
+  "type": "bar",
+  "data": {
+      "labels": ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+      "datasets": [{
+          "label": "# of Votes",
+          "data": [12, 19, 3, 5, 2, 3],
+          "backgroundColor": [
+              "rgba(255, 99, 132, 0.2)",
+              "rgba(54, 162, 235, 0.2)",
+              "rgba(255, 206, 86, 0.2)",
+              "rgba(75, 192, 192, 0.2)",
+              "rgba(153, 102, 255, 0.2)",
+              "rgba(255, 159, 64, 0.2)"
+          ],
+          "borderColor": [
+              "rgba(255,99,132,1)",
+              "rgba(54, 162, 235, 1)",
+              "rgba(255, 206, 86, 1)",
+              "rgba(75, 192, 192, 1)",
+              "rgba(153, 102, 255, 1)",
+              "rgba(255, 159, 64, 1)"
+          ],
+          "borderWidth": 1
+      }]
+  },
+  "options": {
+      "scales": {
+          "yAxes": [{
+              "ticks": {
+                  "beginAtZero": true
+              }
+          }]
+      }
+  }
+}
+                </div>
+                </div>
+                <div class="row">
+                  <div id="preloader" class="preloader-wrapper big active">
+                    <div class="spinner-layer spinner-blue-only">
+                      <div class="circle-clipper left">
+                        <div class="circle"></div>
+                      </div><div class="gap-patch">
+                        <div class="circle"></div>
+                      </div><div class="circle-clipper right">
+                        <div class="circle"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row center">
+                  <img id="chart-image" src="">
+                  <div class="error card-panel red">
+                    <span id="error-container" class="white-text">
+                      Hello there!
+                    </span>
+                  </div>
+                </div>
+                <div class="row">
+                  <a id="generate-chart" class="btn green">Generate Chart!</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+  </body>
+  <script src="/javascripts/jquery.min.js" type="text/javascript"></script>
+  <script src="/javascripts/ace.js" type="text/javascript"></script>
+  <script src="/javascripts/mode-json.js" type="text/javascript"></script>
+  <script src="/javascripts/theme-monokai.js" type="text/javascript"></script>
+  <script src="/javascripts/ext-searchbox.js" type="text/javascript"></script>
+  <script type="text/javascript">
+      var retry = function () {
+        $('#chart-image').hide();
+        $('#editor-container').show();
+        $('#generate-chart').text('Generate Chart!');
+        $('.error').hide();
+        $('#generate-chart').click(setup);
+      }
+      var editor = ace.edit("editor");
+      editor.setTheme("ace/theme/monokai");
+      editor.getSession().setMode("ace/mode/json");
+      $('#chart-image').hide();
+      $('#preloader').hide();
+      $('.error').hide();
+      
+      var setup = function () {
+        $('#generate-chart').hide();
+        $('#editor-container').hide();
+        $('.error').hide();
+        $('#generate-chart').text('Try Again');
+        $('#generate-chart').off('click');
+        $('#generate-chart').click(retry);
+        $('#generate-chart').attr('class', 'btn blue');
+        $('#preloader').show();
+        $.ajax({
+          type: 'POST',
+          url: window.location.protocol + '//' + window.location.host + '/generate-chart',
+          json: true,
+          contentType: 'application/json',
+          processData: false,
+          dataType: 'json',
+          data: editor.getValue(),
+          success: function (data) {
+            $('#chart-image').attr('src', data.link);
+            $('#preloader').hide();
+            $('#chart-image').show();
+            $('#generate-chart').show();
+          },
+          
+        })
+        .fail(function (err) {
+          if (err.responseJSON && err.responseJSON.error.code && err.responseJSON.error.title) {
+            $('#error-container').text(err.responseJSON.error.code + ': ' + err.responseJSON.error.title);
+          } else {
+            $('#error-container').text(err.statusText);
+          }
+          $('.error').show();
+          $('#preloader').hide();
+          $('#generate-chart').show();
+        });
+      }
+      $('#generate-chart').click(setup);
+  </script>
+</html>

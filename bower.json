@@ -1,0 +1,26 @@
+{
+  "name": "chartjs-node-demo",
+  "description": "",
+  "main": "",
+  "authors": [
+    "Steve Edouard <steven.edouard1@gmail.com>"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "materialize": "^0.97.8",
+    "prism": "^1.6.0",
+    "material-icons": "^0.1.0",
+    "material-design-icons": "^3.0.1",
+    "ace": "^1.2.6",
+    "ace-builds": "^1.2.6",
+    "jquery": "^3.1.1"
+  }
+}

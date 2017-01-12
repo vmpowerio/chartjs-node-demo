@@ -1,0 +1,12 @@
+# osx
+.DS_Store
+# config
+.config*
+# build output
+public
+# bower
+bower_components
+# npm
+node_modules
+npm-debug.log
+

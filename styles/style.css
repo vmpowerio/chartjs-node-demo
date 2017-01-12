@@ -1,0 +1,46 @@
+body {
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+#editor { 
+    position: relative;
+    height: 300px;
+    width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.error {
+  width: 50%;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+.vmpower-logo {
+  width: 300px;
+}
+.nav-button {
+  display: inline-flex;
+}
+.material-icons {
+  float: left
+}
+a {
+  color: #00B7FF;
+}
+.valign-wrapper {
+  height: 90vh;
+}
+.valign {
+  width: inherit;
+}
+.language-json {
+  min-height: 300px;
+}
+.banner-logo {
+  width: 50%
+}
+.nav-wrapper {
+  padding-top: 0px !important;
+  padding-left: 0px !important;
+  padding-right: 0px !important;
+  padding-bottom: 0px !important;
+  background-color: #ff9800;
+}
